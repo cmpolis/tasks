@@ -1,8 +1,11 @@
-// import './App.css';
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route } from 'react-router-dom'
+
 import Header from './components/Header'
+import Footer from './components/Footer'
 import Tasks from './components/Tasks'
 import AddTask from './components/AddTask'
-import { useState, useEffect } from 'react'
+import About from './components/About'
 
 const TASKS_URL = 'http://localhost:5000/tasks';
 function urlForTaskId(id) {
@@ -89,13 +92,21 @@ function App() {
   }
 
   return (
-    <div className="container">
-      <Header title="baz" showAddTask={showAddTask} onAdd={() => setShowAddTask(!showAddTask)} />
-      {showAddTask && <AddTask onAdd={addTask} />}
-      {tasks.length > 0 ?
-        (<Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />)
-        : <p>No tasks to show</p>}
-    </div>
+    <Router>
+      <div className="container">
+        <Header title="baz" showAddTask={showAddTask} onAdd={() => setShowAddTask(!showAddTask)} />
+        <Route path='/' exact render={(props) => (
+          <>
+           {showAddTask && <AddTask onAdd={addTask} />}
+           {tasks.length > 0 ?
+             (<Tasks tasks={tasks} onDelete={deleteTask} onToggle={toggleReminder} />)
+             : <p>No tasks to show</p>}
+          </>
+        )} />
+        <Route path='/about' component={About} />
+        <Footer />
+      </div>
+    </Router>
   );
 }
 
